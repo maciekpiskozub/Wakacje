@@ -31,9 +31,14 @@ public class MainActivity extends AppCompatActivity {
         TextView textView = findViewById(R.id.holidaysStart);
 
         LocalDate holidaysStarts = lastSaturdayOfJune(LocalDate.now().getYear());
+        LocalDate schoolStarts = firstDayOfSchool(LocalDate.now().getYear());
         // Jezeli data jest po dacie rozpoczecia wakacji
         if(LocalDate.now().isAfter(holidaysStarts)) {
             holidaysStarts = lastSaturdayOfJune(LocalDate.now().getYear() + 1);
+        }
+
+        if(LocalDate.now().isAfter(schoolStarts)) {
+            schoolStarts = firstDayOfSchool(LocalDate.now().getYear()+1);
         }
 
         textView.setText(String.format("Wakacje zaczynaja sie %s", holidaysStarts.toString()));
@@ -49,5 +54,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return endOfJune;
+    }
+
+    private LocalDate firstDayOfSchool(int year) {
+        LocalDate firstOfSeptember = LocalDate.of(year, 9, 1);
+        while (firstOfSeptember.getDayOfWeek() == DayOfWeek.SATURDAY) {
+            firstOfSeptember = firstOfSeptember.plusDays(2);
+        }
+
+        while (firstOfSeptember.getDayOfWeek() == DayOfWeek.SUNDAY) {
+            firstOfSeptember = firstOfSeptember.plusDays(1);
+        }
+        return firstOfSeptember;
     }
 }
